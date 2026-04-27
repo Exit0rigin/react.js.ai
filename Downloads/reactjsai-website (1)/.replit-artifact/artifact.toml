@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "React.js.ai"
+version = "1.0.0"
+id = "artifacts/react-js-ai"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24534
+
+[services.development]
+run = "pnpm --filter @workspace/react-js-ai run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/react-js-ai", "run", "build" ]
+publicDir = "artifacts/react-js-ai/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24534"
+BASE_PATH = "/"
