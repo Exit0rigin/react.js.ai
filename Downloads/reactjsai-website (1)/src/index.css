@@ -165,9 +165,18 @@
   }
   html, body {
     background: #030305;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  html {
+    scroll-padding-top: 0;
   }
   body {
     @apply font-sans antialiased text-foreground;
+  }
+  #root {
+    overflow: clip;
   }
 }
 
@@ -213,6 +222,164 @@
   .border.active-elevate-2:not(.no-active-interaction-elevate)::after,
   .border.hover-elevate:not(.no-hover-interaction-elevate)::after {
     inset: -1px;
+  }
+
+  /* GPU Acceleration & Scroll Performance */
+  .motion-safe:not(.no-gpu-accel),
+  [data-rfd-draggable-context-id],
+  canvas {
+    transform: translate3d(0, 0, 0);
+    will-change: auto;
+  }
+  
+  .framer-motion-div {
+    transform: translate3d(0, 0, 0);
+  }
+
+  /* Reduce paint on scroll */
+  section {
+    contain: style;
+  }
+
+  /* Smooth scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 240, 255, 0.3);
+    border-radius: 4px;
+    transition: background 0.3s ease;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 240, 255, 0.6);
+  }
+
+  /* Mobile & Responsive Optimizations */
+  @media (max-width: 640px) {
+    html {
+      font-size: 14px;
+    }
+    
+    body {
+      -webkit-text-size-adjust: 100%;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Touch-friendly targets — only for form elements and CTA buttons, not all links */
+    button:not([aria-label]),
+    input,
+    textarea,
+    select {
+      min-height: 44px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    /* Prevent horizontal overflow */
+    body {
+      overflow-x: hidden;
+    }
+
+    /* Better text readability on mobile */
+    h1 { letter-spacing: -0.02em; }
+    h2 { letter-spacing: -0.015em; }
+    h3 { letter-spacing: -0.01em; }
+
+    /* Improve form accessibility */
+    input:focus, textarea:focus, select:focus {
+      font-size: 16px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    /* Desktop optimizations */
+    body {
+      -webkit-font-smoothing: subpixel-antialiased;
+    }
+  }
+
+  /* Accessibility improvements */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* High DPI displays */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    body {
+      -webkit-font-smoothing: antialiased;
+    }
+  }
+
+  /* Dark mode media query support */
+  @media (prefers-color-scheme: dark) {
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 240, 255, 0.3);
+    }
+  }
+
+  /* Simple Animation Keyframes */
+  @keyframes gradient-shift {
+    0%, 100% {
+      opacity: 0.3;
+    }
+    50% {
+      opacity: 0.6;
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px) translateX(0px);
+    }
+    25% {
+      transform: translateY(-20px) translateX(15px);
+    }
+    50% {
+      transform: translateY(-40px) translateX(0px);
+    }
+    75% {
+      transform: translateY(-20px) translateX(-15px);
+    }
+  }
+
+  @keyframes float-slow {
+    0%, 100% {
+      transform: translateY(0px) translateX(0px);
+    }
+    33% {
+      transform: translateY(-30px) translateX(-20px);
+    }
+    66% {
+      transform: translateY(-15px) translateX(20px);
+    }
+  }
+
+  .animate-gradient-shift {
+    animation: gradient-shift 6s ease-in-out infinite;
+  }
+
+  .animate-float {
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .animate-float-slow {
+    animation: float-slow 10s ease-in-out infinite;
   }
 }
 
